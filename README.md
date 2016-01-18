@@ -37,7 +37,8 @@ either the origin server or from other localhost servers that run in separate pr
 and listen on different ports.
 
 The number of files to be tested is 100, 300, and 500, composed of blocking (non-async)
-script elements.
+script elements. Each file is randomly assigned to one of the available port numbers
+(which includes either the origin server or the file servers).
 
 The following combinations of servers were tested:
 - 0 file servers (the origin serves assets)
@@ -53,7 +54,7 @@ Conclusions
 ### HTTP1
 
 There are no immediate measurable gains by splitting your service of files across localhost
-ports.
+ports. In practice, the performance tends to degrade in most cases.
 
 As long as your origin server is non-blocking, you should probably serve the files from
 the same server. This assumes that you are not performing CPU-intensive work in the server,
@@ -68,13 +69,16 @@ The tests were run against `Chrome/47.0.2526.111` and `Firefox/41.0` on an OSX m
 
 ### HTTP2
 
-Similarly to HTTP1, the results were inconsistent and ultimately inconclusive.
+There was no consistent indication that serving from multiple servers will improve the
+performance for browser load times, when serving from localhost. While HTTP2 may be 
+practical when dealing with remote servers with more latency, localhost servers do not 
+exhibit consistent performance gains across the test cases.
 
-Anecdotally, Chrome seems to improve its performance as more servers are added. From
-a very limited set of data, 8 seems to be the sweet spot.
+Firefox's performance seems to degrade for every additional server used. 
 
-Firefox's performance seems to degrade as you start serving files from other localhost
-ports.
+While Chrome does seem to improve its performance as more servers are added. It only
+produces marginal improvements with a large increase in the additional complexity of
+a system.
 
 The results are contained in `data_http2.json`.
 
