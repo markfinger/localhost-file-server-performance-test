@@ -38,7 +38,9 @@ and listen on different ports.
 
 The number of files to be tested is 100, 300, and 500, composed of blocking (non-async)
 script elements. Each file is randomly assigned to one of the available port numbers
-(which includes either the origin server or the file servers).
+(which includes either the origin server or the file servers). Each file contains a random
+amount of data, composed of 10 to ~30,000 characters. A typical payload for a page would 
+range from 5-30mb.
 
 The following combinations of servers were tested:
 - 0 file servers (the origin serves assets)
